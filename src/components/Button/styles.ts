@@ -3,6 +3,19 @@ import { RectButton } from 'react-native-gesture-handler';
 
 /* Sempre que eu vou estilizar um componente de fora do React Native,
 eu paso ele entre parênteses */
-export const Container = styled(RectButton)``;
+export const Container = styled(RectButton)`
+  width: 100%;
+  height: 60px;
+  background: #ff9000;
+  border-radius: 10px;
+  margin-top: 8px;
 
-export const ButtonText = styled.Text``;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const ButtonText = styled.Text`
+  font-family: 'RobotoSlab-Mediun';
+  color: #312e38;
+  font-size: 18px;
+`;
