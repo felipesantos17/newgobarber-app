@@ -4,7 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 /* Sempre que eu vou estilizar um componente de fora do React Native,
 eu paso ele entre parênteses */
 export const Container = styled(RectButton)`
-  width: 100%;
+  /* width: 100%; */
   height: 60px;
   background: #ff9000;
   border-radius: 10px;
