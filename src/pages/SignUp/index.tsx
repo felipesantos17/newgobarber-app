@@ -14,6 +14,7 @@ import * as Yup from 'yup';
 
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import api from '../../services/api';
 
 import getValidationErrors from '../../utils/getValidationErrors';
 
@@ -37,43 +38,48 @@ const SignUp: React.FC = () => {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(async (data: SignUpFormData) => {
-    try {
-      formRef.current?.setErrors({});
+  const handleSignUp = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-      /* Geralmente quando for validar várioas informações ao mesmo tempo
+        /* Geralmente quando for validar várioas informações ao mesmo tempo
       é bom criar um "schema" de validação */
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatório'),
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('Digite um e-mail válido'),
-        password: Yup.string().min(6, 'No mínimo 6 dígitos'),
-      });
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatório'),
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
+          password: Yup.string().min(6, 'No mínimo 6 dígitos'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      /* await api.post('/users', data); */
+        await api.post('/users', data);
 
-      /* history.push('/'); */
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err);
+        Alert.alert('Cadastro concluido!', 'Você já pode logar na aplicação.');
 
-        formRef.current?.setErrors(errors);
+        navigation.goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err);
 
-        return;
+          formRef.current?.setErrors(errors);
+
+          return;
+        }
+
+        /* Disparar um toast */
+        Alert.alert(
+          'Erro no cadastro.',
+          'Ocorreu um erro ao fazer cadastrar, cheque informações.',
+        );
       }
-
-      /* Disparar um toast */
-      Alert.alert(
-        'Erro no cadastro.',
-        'Ocorreu um erro ao fazer cadastrar, cheque informações.',
-      );
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
